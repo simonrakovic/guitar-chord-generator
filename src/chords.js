@@ -20,6 +20,16 @@ var fourth_string = ["D","Eb","E","F","Gb","G","Ab","A","Bb","B","C","Db","D","E
 var fifth_string = ["A","Bb","B","C","Db","D","Eb","E","F","Gb","G","Bb","B","C","Db"]
 var sixth_string = first_string
 
+export function getStringNote(string, bar){
+  var note = ""
+  guitar_strings.map((obj)=>{
+    if(parseInt(obj.string) === string){
+      note = obj.notes[bar]
+      return true
+    }
+  })
+  return note
+}
 
 export function findMajorScale(key){
     var searched_scale = []
@@ -290,26 +300,77 @@ function k_combinations(set, k) {
 	return combs;
 }
 
+function compareArrays(array1, array2){
+
+  for(var i = 0; i < array1.length; i++){
+    if(array1[i] !== array2[i])return false
+  }
+  return true
+}
+
+function checkForDuplicates(chord, valid_chords){
+  var isEqual = false
+  valid_chords.map((valid_chord)=>{
+    if(compareArrays(chord.chord_validator, valid_chord.chord_validator)){
+      //console.log(chord.chord_validator+" "+valid_chord.chord_validator)
+      isEqual = true
+      return true
+    }
+  })
+
+  return isEqual
+}
+
+function checkForPosibility(chord_validator){
+  var num_empty_strings = 0
+  var lowest_bar = 14
+  var num_lowest_bars = 1
+  chord_validator.map((bar)=>{
+    if(bar === 0) num_empty_strings += 1
+    else if(bar < lowest_bar){
+      lowest_bar = bar
+      if(bar === lowest_bar) num_lowest_bars += 1
+    }
+  })
+  if(num_empty_strings < 3){
+    console.log(chord_validator+" lowest_bar:"+lowest_bar+"num_lowest_bars:"+num_lowest_bars)
+    switch (num_empty_strings) {
+      case 0:
+        if(num_lowest_bars >= 3)return false
+        break;
+      case 1:
+        if(num_lowest_bars >= 2)return false
+        break;
+      case 2:
+        if(num_lowest_bars >= 1)return false
+        break;
+    }
+  }
+  return true
+}
+
 function findViableChords(chord, posible_guitar_chords_combinations, guitar_chord_validator, root_bass){
   var valid_chords = []
 
   posible_guitar_chords_combinations.map(function(posible_chord){
     var distance = 0
-    var guitar_chord = {}
+    var guitar_chord = {chord_validator: [0,0,0,0,0,0]}
 
     posible_chord.map(function(obj){
       distance += Math.abs(obj.distance)
       if(!(obj.string in guitar_chord)){
         guitar_chord[obj.string] = obj.bar
+        guitar_chord.chord_validator[obj.string-1] = parseInt(obj.bar)
         guitar_chord[obj.note] = obj
       }else if(obj.string in guitar_chord && obj.note !== root_bass.note){
         if(guitar_chord[obj.string] === root_bass.note){
           guitar_chord[obj.string] = obj.bar
+          guitar_chord.chord_validator[obj.string-1] = parseInt(obj.bar)
           guitar_chord[obj.note] = obj
         }
       }
     })
-    if(distance > 4)return true
+    if(distance > 5)return true
 
     for(var i = 0; i < chord.length; i++){
       var note = chord[i]
@@ -319,6 +380,10 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
       }
     }
     guitar_chord[root_bass.string] = root_bass.bar
+    guitar_chord.chord_validator[root_bass.string-1] = parseInt(root_bass.bar)
+    if(checkForDuplicates(guitar_chord, valid_chords))return true
+    //if(!checkForPosibility(guitar_chord.chord_validator))return true
+    //console.log(guitar_chord.chord_validator)
     valid_chords.push(guitar_chord)
   })
 
@@ -330,7 +395,7 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
 export function findGuitarChords(chord){
 
   //var chord = createChord("B",["1", "3", "5", "7b"])
-  console.log(chord)
+  //console.log(chord)
   var guitar_chord_validator = {"chord":chord}
 
   for(var i = 0; i < chord.length; i++){

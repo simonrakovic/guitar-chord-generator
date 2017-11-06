@@ -71,6 +71,10 @@
     .guitar-chord-table-body tr td:first-child {
       width: 10px;
       border-top: 0; }
+    .guitar-chord-table-body tr td:last-child {
+      width: 10px;
+      border-top: 0;
+      border-right: 0; }
     .guitar-chord-table-body tr td div {
       position: relative;
       width: 100%;
@@ -78,6 +82,10 @@
       .guitar-chord-table-body tr td div .string {
         position: absolute;
         right: 10px;
+        top: -10px; }
+      .guitar-chord-table-body tr td div .note {
+        position: absolute;
+        left: 10px;
         top: -10px; }
       .guitar-chord-table-body tr td div .dot {
         display: block;

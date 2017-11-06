@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import './App.css';
 import * as Chords from './chords.js';
 
+const roman_numbers = [
+  <span></span>,<span>&#8544;</span>, <span>&#8545;</span>,
+  <span>&#8546;</span>, <span>&#8547;</span>,
+  <span>&#8548;</span>, <span>&#8549;</span>,
+  <span>&#8550;</span>, <span>&#8551;</span>,
+  <span>&#8552;</span>, <span>&#8553;</span>,
+  <span>&#8554;</span>,<span>&#8555;</span>,
+  <span>&#8555;&#8544;</span>,<span>&#8555;&#8544;&#8544;</span>
+]
 
 const avalible_chords = [
   { template: ['1', '3', '5'], label: 'major', index: 0},
@@ -90,15 +99,7 @@ class App extends Component {
     var guitar_chord_tablature = []
 
     var guitar_chord_tablature_row_head = []
-    var roman_numbers = [
-      <span></span>,<span>&#8544;</span>, <span>&#8545;</span>,
-      <span>&#8546;</span>, <span>&#8547;</span>,
-      <span>&#8548;</span>, <span>&#8549;</span>,
-      <span>&#8550;</span>, <span>&#8551;</span>,
-      <span>&#8552;</span>, <span>&#8553;</span>,
-      <span>&#8554;</span>,<span>&#8555;</span>,
-      <span>&#8555;&#8544;</span>,<span>&#8555;&#8544;&#8544;</span>
-    ]
+
 
     guitar_chord_tablature_row_head.push(<th></th>)
     for(var i = min_bar; i < max_bar + 1; i++){
@@ -109,20 +110,22 @@ class App extends Component {
     for(var i = 1; i < 7; i++){
       var guitar_chord_tablature_row = []
       if(i in guitar_chord){
-        if(guitar_chord[i] === 0) guitar_chord_tablature_row.push(<td><div><span className="string">O</span></div></td>)
-        else guitar_chord_tablature_row.push(<td><div><span className="string">{i}</span></div></td>)
+        guitar_chord_tablature_row.push(<td><div><span className="string">{i}</span></div></td>)
         for(var j = min_bar; j < max_bar + 1; j++){
           if(j === guitar_chord[i]){
-            guitar_chord_tablature_row.push(<td><div><span className="dot"></span></div></td>)
+            guitar_chord_tablature_row.push(<td><div><span className="note">{Chords.getStringNote(i, j)}</span><span className="dot"></span></div></td>)
           }else{
             guitar_chord_tablature_row.push(<td></td>)
           }
         }
+        if(guitar_chord[i] === 0)guitar_chord_tablature_row.push(<td><div><span className="note">{Chords.getStringNote(i, guitar_chord[i])}</span></div></td>)
+        else guitar_chord_tablature_row.push(<td><div></div></td>)
       }else{
-        guitar_chord_tablature_row.push(<td><div><span className="string">X</span></div></td>)
+        guitar_chord_tablature_row.push(<td><div><span className="string">{i}</span></div></td>)
         for(var j = min_bar; j < max_bar + 1; j++){
             guitar_chord_tablature_row.push(<td></td>)
         }
+        guitar_chord_tablature_row.push(<td><div><span className="note">X</span></div></td>)
       }
       guitar_chord_tablature.push(<tr>{guitar_chord_tablature_row}</tr>)
     }
@@ -141,9 +144,10 @@ class App extends Component {
 
     this.state.guitar_chords.map((obj)=>{
       var root_bass_bar = obj.root_bass.bar
+      var guitar_chords = []
       obj.chords.map((chord)=>{
-        console.log(chord)
-        guitar_chord_tablatures.push(
+        //console.log(chord)
+        guitar_chords.push(
           <div className="col-lg-2">
             <table className="guitar-chord-table">
               <tbody className="guitar-chord-table-body">
@@ -152,6 +156,13 @@ class App extends Component {
             </table>
           </div>)
       })
+
+      guitar_chord_tablatures.push(
+        <div className="row guitar-chords">
+          <h2>{roman_numbers[root_bass_bar]}</h2>
+          {guitar_chords}
+        </div>
+      )
     })
 
 
@@ -181,11 +192,9 @@ class App extends Component {
                 <div className="row">
                     <h2 className="App-title">{this.state.chord.map((note, i)=><span key={i} className="key-scale">{note}</span>)}</h2>
                 </div>
-                <div className="row guitar-chords">
 
-                  {guitar_chord_tablatures}
+                {guitar_chord_tablatures}
 
-                </div>
               </div>
             </div>
           </div>
