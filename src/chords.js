@@ -1,6 +1,6 @@
 
 
-var chromatic_scale = ["C","Cis|Db","D","Dis|Eb","E","F","Fis|Gb","G","Gis|Ab","A","Ais|Bb","B"]
+var chromatic_scale = ["C","C#|Db","D","D#|Eb","E","F","F#|Gb","G","G#|Ab","A","A#|Bb","B"]
 var major_scale = [2,2,1,2,2,2,1]
 
 
@@ -24,6 +24,8 @@ var sixth_string = first_string
 export function findMajorScale(key){
     var searched_scale = []
     var step = 0
+    var lowered = false
+    if( key === "F" || key === "D#|Eb" || key === "G#|Ab" || key === "A#|Bb" ) lowered = true
 
     for(var i=0;i < chromatic_scale.length;i++){
 
@@ -35,8 +37,10 @@ export function findMajorScale(key){
             if(index_postion >= chromatic_scale.length){
               index_postion -= chromatic_scale.length
             }
+            var searched_note = chromatic_scale[index_postion]
+            if(searched_note.includes("|")) searched_note = lowered ? chromatic_scale[index_postion].split("|")[1] : chromatic_scale[index_postion].split("|")[0]
 
-            searched_scale.push(chromatic_scale[index_postion])
+            searched_scale.push(searched_note)
             step += major_scale[j]
           }
 
@@ -49,20 +53,48 @@ export function findMajorScale(key){
 
 
 export function createChord(key, chord_schema){
-  var chord_major_scale = findMajorScale(key)
 
+  var chord_major_scale = findMajorScale(key)
+  //console.log(chord_schema)
   var chord = []
   chord_schema.map(function(x){
+
     if(x.includes("b")){
-      var key = chord_major_scale[parseInt(x[0])-1]
+      x = parseInt(x[0])
+      if( x > 7) x = x % 7
+
+      var key = chord_major_scale[x - 1]
       chromatic_scale.map(function(x,i){
-        if(x === key){
-          if(i === 0) i = chromatic_scale.lenght + 1
-          chord.push(chromatic_scale[i-1])
+        if(key.includes("#")){
+          if(x === key[0]){
+            i += 1
+            if(i > chromatic_scale.lenght ) i = chromatic_scale.lenght - i // NOTE: not sure about that
+
+            if(chromatic_scale[i - 1].includes("|"))chord.push(chromatic_scale[i - 1].split("|")[1])
+            else chord.push(chromatic_scale[i - 1])
+
+          }
+        }else if(key.includes("b")){
+          if(x === key[0]){
+            i -= 1
+            if(i < 0) i = chromatic_scale.lenght + i
+            if(chromatic_scale[i - 1].includes("|"))chord.push(chromatic_scale[i - 1].split("|")[1])
+            else chord.push(chromatic_scale[i - 1])
+          }
+        }
+        else{
+          if(x === key){
+            if(i === 0) i = chromatic_scale.lenght
+
+            if(chromatic_scale[i - 1].includes("|"))chord.push(chromatic_scale[i - 1].split("|")[1])
+            else chord.push(chromatic_scale[i - 1])
+          }
         }
       })
     }else{
-      chord.push(chord_major_scale[parseInt(x)-1])
+      x = parseInt(x)
+      if( x > 7) x = x % 7
+      chord.push(chord_major_scale[x - 1])
     }
   })
 
@@ -165,7 +197,9 @@ function findChordNotesOnGuitar(guitar_chord_root_note, chord, distance){
     for(var i = 0; i < parseInt(root_note_string) - 1; i++){
       for(var j = starting_position; j < ending_position; j++){
         if(guitar_strings[i].notes[j] ===  note){
-          chord_notes_on_guitar.push({"note":note, "string":i + 1, "bar":j, "distance": root_note_bar - j})
+          var distance = root_note_bar - j
+          if(j === 0) distance = 0
+          chord_notes_on_guitar.push({"note":note, "string":i + 1, "bar":j, "distance": distance})
           //console.log(guitar_strings[i].string+"|"+j+"|"+note)
         }
 
@@ -284,7 +318,7 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
         if(!(note in guitar_chord))return true
       }
     }
-
+    guitar_chord[root_bass.string] = root_bass.bar
     valid_chords.push(guitar_chord)
   })
 
@@ -293,8 +327,10 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
 }
 
 
-function findGuitarChords(chord){
-  var chord = createChord("B",["1", "3", "5", "7b"])
+export function findGuitarChords(chord){
+
+  //var chord = createChord("B",["1", "3", "5", "7b"])
+  console.log(chord)
   var guitar_chord_validator = {"chord":chord}
 
   for(var i = 0; i < chord.length; i++){
@@ -303,9 +339,8 @@ function findGuitarChords(chord){
     guitar_chord_validator[note] = false
   }
 
-
+  var guitar_chords = []
   var root_basses = findChordRootBassPosibilities(chord)
-
 
   //console.log(root_basses)
   root_basses.map(function(x){
@@ -316,12 +351,11 @@ function findGuitarChords(chord){
 
     var viable_guitar_chords = findViableChords(chord, posible_chord_notes_combinations, guitar_chord_validator, x)
     //console.log(x)
-    //console.log(posible_chord_notes)
-    console.log(viable_guitar_chords)
-    console.log()
+    //console.log(viable_guitar_chords)
+    guitar_chords.push({root_bass: x, chords: viable_guitar_chords})
   })
 
-
+  return guitar_chords
 
 }
 
