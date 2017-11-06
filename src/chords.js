@@ -119,11 +119,15 @@ function findChordRootBassPosibilities(chord){
   var root = chord[0]
   var root_note_positions = []
   sixth_string.map(function(key, i){
-    if(root.includes("|")) root = root.split("|")[1]
+    if(root.includes("#")){
+      root = root[0]
+    }
+
 
     if(key === root)root_note_positions.push({"string": "6", "bar": i, "note": root})
     else if(fifth_string[i] === root)root_note_positions.push({"string": "5", "bar": i, "note": root})
     else if(fourth_string[i] === root)root_note_positions.push({"string": "4", "bar": i, "note": root})
+
   })
 
   return root_note_positions
@@ -375,7 +379,7 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
         }
       }
     })
-    if(distance > 6)return true
+    if(distance > 5)return true
 
     for(var i = 0; i < chord.length; i++){
       var note = chord[i]
@@ -400,7 +404,17 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
 export function findGuitarChords(chord){
 
   //var chord = createChord("B",["1", "3", "5", "7b"])
-  //console.log(chord)
+
+  chord.map((note, i)=>{
+    if(note.includes("#")){
+      chromatic_scale_ag.map((x, j)=>{
+        if(x === note){
+          chord[i] = chromatic_scale_lo[j]
+          return false
+        }
+      })
+    }
+  })
   console.log(chord)
   var guitar_chord_validator = {"chord":chord}
 

@@ -58,7 +58,7 @@ class App extends Component {
   }
 
   getSelectedKey(obj){
-    this.setState({key : obj, chord_type: -1, key_scale: Chords.findMajorScale(obj.note), chord: []})
+    this.setState({key : obj, chord_type: -1, key_scale: Chords.findMajorScale(obj.note), chord: [], guitar_chords:[]})
   }
 
   getSelectedChord(index){
