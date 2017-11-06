@@ -1,6 +1,8 @@
 
 
 var chromatic_scale = ["C","C#|Db","D","D#|Eb","E","F","F#|Gb","G","G#|Ab","A","A#|Bb","B"]
+var chromatic_scale_ag = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"]
+var chromatic_scale_lo = ["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"]
 var major_scale = [2,2,1,2,2,2,1]
 
 
@@ -336,15 +338,15 @@ function checkForPosibility(chord_validator){
 
     switch (num_empty_strings) {
       case 0:
-        console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
+        //console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
         if(num_lowest_bars <= 3)return false
         break;
       case 1:
-        console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
+        //console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
         if(num_lowest_bars <= 2)return false
         break;
       case 2:
-        console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
+        //console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
         if(num_lowest_bars <= 1)return false
         break;
     }
@@ -399,6 +401,7 @@ export function findGuitarChords(chord){
 
   //var chord = createChord("B",["1", "3", "5", "7b"])
   //console.log(chord)
+  console.log(chord)
   var guitar_chord_validator = {"chord":chord}
 
   for(var i = 0; i < chord.length; i++){

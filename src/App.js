@@ -165,7 +165,7 @@ class App extends Component {
           </div>
         )
       }
-  
+
     })
 
 
@@ -180,7 +180,7 @@ class App extends Component {
           <div className="col-lg-1"></div>
           <div className="col-lg-10">
             <div className="row cromathic-scale">
-              <p>To get started, choose frome any given key at the bottom.</p>
+              <p>To get started, choose from any given key at the bottom.</p>
 
               <div className="col-lg-12 ">
                 <div className="row">
