@@ -325,24 +325,27 @@ function checkForPosibility(chord_validator){
   var num_empty_strings = 0
   var lowest_bar = 14
   var num_lowest_bars = 1
+
   chord_validator.map((bar)=>{
     if(bar === 0) num_empty_strings += 1
     else if(bar < lowest_bar){
       lowest_bar = bar
-      if(bar === lowest_bar) num_lowest_bars += 1
-    }
+    }else if(bar === lowest_bar) num_lowest_bars += 1
   })
   if(num_empty_strings < 3){
-    console.log(chord_validator+" lowest_bar:"+lowest_bar+"num_lowest_bars:"+num_lowest_bars)
+
     switch (num_empty_strings) {
       case 0:
-        if(num_lowest_bars >= 3)return false
+        console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
+        if(num_lowest_bars <= 3)return false
         break;
       case 1:
-        if(num_lowest_bars >= 2)return false
+        console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
+        if(num_lowest_bars <= 2)return false
         break;
       case 2:
-        if(num_lowest_bars >= 1)return false
+        console.log(chord_validator+" num_empty_strings:"+num_empty_strings+"num_lowest_bars:"+num_lowest_bars)
+        if(num_lowest_bars <= 1)return false
         break;
     }
   }
@@ -370,7 +373,7 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
         }
       }
     })
-    if(distance > 5)return true
+    if(distance > 6)return true
 
     for(var i = 0; i < chord.length; i++){
       var note = chord[i]
@@ -382,7 +385,7 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
     guitar_chord[root_bass.string] = root_bass.bar
     guitar_chord.chord_validator[root_bass.string-1] = parseInt(root_bass.bar)
     if(checkForDuplicates(guitar_chord, valid_chords))return true
-    //if(!checkForPosibility(guitar_chord.chord_validator))return true
+    if(!checkForPosibility(guitar_chord.chord_validator))return true
     //console.log(guitar_chord.chord_validator)
     valid_chords.push(guitar_chord)
   })
