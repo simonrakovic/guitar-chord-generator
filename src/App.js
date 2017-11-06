@@ -143,26 +143,29 @@ class App extends Component {
     var guitar_chord_tablatures = []
 
     this.state.guitar_chords.map((obj)=>{
-      var root_bass_bar = obj.root_bass.bar
-      var guitar_chords = []
-      obj.chords.map((chord)=>{
-        //console.log(chord)
-        guitar_chords.push(
-          <div className="col-lg-2">
-            <table className="guitar-chord-table">
-              <tbody className="guitar-chord-table-body">
-                {this.createTableture(chord, obj.root_bass)}
-              </tbody>
-            </table>
-          </div>)
-      })
+      if(obj.chords.length !== 0){
+        var root_bass_bar = obj.root_bass.bar
+        var guitar_chords = []
+        obj.chords.map((chord)=>{
+          //console.log(chord)
+          guitar_chords.push(
+            <div className="col-lg-2">
+              <table className="guitar-chord-table">
+                <tbody className="guitar-chord-table-body">
+                  {this.createTableture(chord, obj.root_bass)}
+                </tbody>
+              </table>
+            </div>)
+        })
 
-      guitar_chord_tablatures.push(
-        <div className="row guitar-chords">
-          <h2>{roman_numbers[root_bass_bar]}</h2>
-          {guitar_chords}
-        </div>
-      )
+        guitar_chord_tablatures.push(
+          <div className="row guitar-chords">
+            <h2>{roman_numbers[root_bass_bar]}</h2>
+            {guitar_chords}
+          </div>
+        )
+      }
+  
     })
 
 
