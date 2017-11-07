@@ -7,12 +7,13 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
-  padding: 20px;
+  height: 50px;
+  padding-top: 10px;
   color: white; }
 
 .App-title {
-  font-size: 1.5em; }
+  font-size: 1.5em;
+  margin: 0; }
 
 .App-intro {
   font-size: large; }
@@ -42,6 +43,9 @@
   .chord-types-btn.active {
     background: black; }
 
+.scale {
+  margin-top: 20px; }
+
 .cromathic-scale-btn {
   height: 30px;
   line-height: 30px;
@@ -53,6 +57,9 @@
     background-color: black; }
   .cromathic-scale-btn.active {
     background: black; }
+
+.guitar-chord-table {
+  margin: 15px; }
 
 .guitar-chord-table-body tr {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -67,7 +74,7 @@
     width: 60px;
     height: 30px;
     border-right: 1px solid black;
-    border-top: 1px solid rgba(0, 0, 0, 0.1); }
+    border-top: 1px solid rgba(0, 255, 0, 0.4); }
     .guitar-chord-table-body tr td:first-child {
       width: 10px;
       border-top: 0; }
@@ -75,6 +82,8 @@
       width: 10px;
       border-top: 0;
       border-right: 0; }
+    .guitar-chord-table-body tr td.string-red {
+      border-top: 1px solid rgba(255, 0, 0, 0.4); }
     .guitar-chord-table-body tr td div {
       position: relative;
       width: 100%;

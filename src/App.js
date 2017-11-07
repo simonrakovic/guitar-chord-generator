@@ -123,7 +123,7 @@ class App extends Component {
       }else{
         guitar_chord_tablature_row.push(<td><div><span className="string">{i}</span></div></td>)
         for(var j = min_bar; j < max_bar + 1; j++){
-            guitar_chord_tablature_row.push(<td></td>)
+            guitar_chord_tablature_row.push(<td className="string-red"></td>)
         }
         guitar_chord_tablature_row.push(<td><div><span className="note">X</span></div></td>)
       }
@@ -149,7 +149,7 @@ class App extends Component {
         obj.chords.map((chord)=>{
           //console.log(chord)
           guitar_chords.push(
-            <div className="col-lg-2">
+            <div className="col-lg-3">
               <table className="guitar-chord-table">
                 <tbody className="guitar-chord-table-body">
                   {this.createTableture(chord, obj.root_bass)}
@@ -177,8 +177,8 @@ class App extends Component {
 
         </header>
         <div className="container-fluid">
-          <div className="col-lg-1"></div>
-          <div className="col-lg-10">
+          <div className="col-lg-2"></div>
+          <div className="col-lg-8">
             <div className="row cromathic-scale">
               <p>To get started, choose from any given key at the bottom.</p>
 
@@ -187,13 +187,13 @@ class App extends Component {
                   {this.state.major_scales.map((obj, i) => <div key={i} className={this.isCromathicScaleBtnActive(obj.note)} onClick={()=>this.getSelectedKey(obj)}>{obj.label}</div>)}
                 </div>
                 <div className="row">
-                  <h2 className="App-title">{this.state.key_scale.map((note, i)=><span key={i} className="key-scale">{note}</span>)}</h2>
+                  <h2 className="scale">{this.state.key_scale.map((note, i)=><span key={i} className="key-scale">{note}</span>)}</h2>
                 </div>
                 <div className="row chord-types">
                     {avalible_chords_type}
                 </div>
                 <div className="row">
-                    <h2 className="App-title">{this.state.chord.map((note, i)=><span key={i} className="key-scale">{note}</span>)}</h2>
+                    <h2 className="scale">{this.state.chord.map((note, i)=><span key={i} className="key-scale">{note}</span>)}</h2>
                 </div>
 
                 {guitar_chord_tablatures}
@@ -201,7 +201,7 @@ class App extends Component {
               </div>
             </div>
           </div>
-          <div className="col-lg-1">
+          <div className="col-lg-2">
 
           </div>
 

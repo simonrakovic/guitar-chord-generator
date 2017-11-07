@@ -22,7 +22,7 @@ var fourth_string = ["D","Eb","E","F","Gb","G","Ab","A","Bb","B","C","Db","D","E
 var fifth_string = ["A","Bb","B","C","Db","D","Eb","E","F","Gb","G","Bb","B","C","Db"]
 var sixth_string = first_string
 
-export function getStringNote(string, bar){
+export function getStringNote(string, bar, type){
   var note = ""
   guitar_strings.map((obj)=>{
     if(parseInt(obj.string) === string){
@@ -80,7 +80,7 @@ export function createChord(key, chord_schema){
         if(key.includes("#")){
           if(x === key[0]){
             i += 1
-            if(i > chromatic_scale.lenght ) i = chromatic_scale.lenght - i // NOTE: not sure about that
+            if(i > chromatic_scale.length ) i = chromatic_scale.length - i // NOTE: not sure about that
 
             if(chromatic_scale[i - 1].includes("|"))chord.push(chromatic_scale[i - 1].split("|")[1])
             else chord.push(chromatic_scale[i - 1])
@@ -89,14 +89,14 @@ export function createChord(key, chord_schema){
         }else if(key.includes("b")){
           if(x === key[0]){
             i -= 1
-            if(i < 0) i = chromatic_scale.lenght + i
-            if(chromatic_scale[i - 1].includes("|"))chord.push(chromatic_scale[i - 1].split("|")[1])
+            if(i < 0) i = chromatic_scale.length + i
+            if(chromatic_scale[i - 1].includes("|"))chord.push(chromatic_scale[i - 1].split("|")[0])
             else chord.push(chromatic_scale[i - 1])
           }
         }
         else{
           if(x === key){
-            if(i === 0) i = chromatic_scale.lenght
+            if(i === 0) i = chromatic_scale.length
 
             if(chromatic_scale[i - 1].includes("|"))chord.push(chromatic_scale[i - 1].split("|")[1])
             else chord.push(chromatic_scale[i - 1])
@@ -218,7 +218,13 @@ function findChordNotesOnGuitar(guitar_chord_root_note, chord, distance){
           chord_notes_on_guitar.push({"note":note, "string":i + 1, "bar":j, "distance": distance})
           //console.log(guitar_strings[i].string+"|"+j+"|"+note)
         }
-
+      }
+    }
+    if(root_note_bar >= distance){
+      for(var i = 0;i < root_note_string; i++){
+        if(guitar_strings[i].notes[0] ===  note){
+          chord_notes_on_guitar.push({"note":note, "string":i + 1, "bar":0, "distance": 0})
+        }
       }
     }
   })
@@ -431,11 +437,11 @@ export function findGuitarChords(chord){
   root_basses.map(function(x){
     var posible_chord_notes = findChordNotesOnGuitar(x, chord, 4)
 
-    //var posible_guitar_chords = findPosibleChords(chord, x, posible_chord_notes, 4)
     var posible_chord_notes_combinations = k_combinations(posible_chord_notes, parseInt(x.string) - 1)
 
     var viable_guitar_chords = findViableChords(chord, posible_chord_notes_combinations, guitar_chord_validator, x)
-    //console.log(x)
+    console.log(x)
+    console.log(posible_chord_notes)
     //console.log(viable_guitar_chords)
     guitar_chords.push({root_bass: x, chords: viable_guitar_chords})
   })
