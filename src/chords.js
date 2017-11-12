@@ -184,7 +184,7 @@ function findChordNotesNearby(chord, chord_root_bass, posible_chord_notes, dista
     }else{
 
     }
-    console.log(x.notes.length)
+    //console.log(x.notes.length)
   })
   var current_chord = chord
 
@@ -233,7 +233,7 @@ function findChordNotesOnGuitar(guitar_chord_root_note, chord, distance){
 
 // NOTE: should do variations of all avalible chords in the future, to be certain that you didnt skip any of them
 function findPosibleChords(chord, root_bass, posible_chord_notes, distance){
-  console.log()
+  //console.log()
   var guitar_chords = []
   //console.log(posible_chord_notes)
   for(var i = 0; i < posible_chord_notes.length; i++){
@@ -248,7 +248,7 @@ function findPosibleChords(chord, root_bass, posible_chord_notes, distance){
           possible_note_string =  posible_chord_notes[x]
       }
     }
-    console.log(possible_note)
+    //console.log(possible_note)
     guitar_chord[possible_note.note] = possible_note
     guitar_chord[possible_note.string] = possible_note
 
@@ -385,7 +385,7 @@ function findViableChords(chord, posible_guitar_chords_combinations, guitar_chor
         }
       }
     })
-    if(distance > 5)return true
+    if(distance > 4)return true
 
     for(var i = 0; i < chord.length; i++){
       var note = chord[i]

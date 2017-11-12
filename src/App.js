@@ -3,7 +3,7 @@ import './App.css';
 import * as Chords from './chords.js';
 
 const roman_numbers = [
-  <span></span>,<span>&#8544;</span>, <span>&#8545;</span>,
+  <span>0</span>,<span>&#8544;</span>, <span>&#8545;</span>,
   <span>&#8546;</span>, <span>&#8547;</span>,
   <span>&#8548;</span>, <span>&#8549;</span>,
   <span>&#8550;</span>, <span>&#8551;</span>,
@@ -85,7 +85,7 @@ class App extends Component {
 
   createTableture(guitar_chord, root_note){
 
-    var min_bar = 14;
+    var min_bar = 20;
     var max_bar = 0
     for(var i = 1; i < 7; i++){
       if(i in guitar_chord){
@@ -95,6 +95,8 @@ class App extends Component {
         else if(min_bar > guitar_chord[i])min_bar = guitar_chord[i]
       }
     }
+    if(min_bar === 20) min_bar = 1 // if there are all empty strings.
+
 
     var guitar_chord_tablature = []
 
